@@ -42,7 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConexionBD.cs" />
+    <Compile Include="DEleccion.cs" />
+    <Compile Include="DLocalidad.cs" />
     <Compile Include="DPartidoPol.cs" />
+    <Compile Include="DRecinto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

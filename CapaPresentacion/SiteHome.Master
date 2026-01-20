@@ -67,7 +67,7 @@
                 </a>
                 <div id="collapseAdministracion" class="collapse" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="#">Lista</a>
+                        <a class="collapse-item" href="Elecciones.aspx">Elecciones</a>
                         <a class="collapse-item" href="Partidos.aspx">Partidos Politicos</a>
                         <a class="collapse-item" href="#">Reportes</a>
                     </div>
@@ -81,9 +81,9 @@
                 </a>
                 <div id="collapseInventario" class="collapse" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="LocalidadesAdmin.aspx">Localidades</a>
-                        <a class="collapse-item" href="RecintosAdmin.aspx">Recintos</a>
-                        <a class="collapse-item" href="MesasAdmin.aspx">Mesas</a>
+                        <a class="collapse-item" href="Localidades.aspx">Localidades</a>
+                        <a class="collapse-item" href="Recintos.aspx">Recintos</a>
+                        <a class="collapse-item" href="Mesas.aspx">Mesas</a>
                     </div>
                 </div>
             </li>

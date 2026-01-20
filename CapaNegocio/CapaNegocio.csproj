@@ -41,7 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NEleccion.cs" />
+    <Compile Include="NLocalidad.cs" />
     <Compile Include="NPartidoPol.cs" />
+    <Compile Include="NRecinto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

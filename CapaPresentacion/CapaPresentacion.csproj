@@ -69,6 +69,7 @@
   <ItemGroup>
     <Content Include="css\sb-admin-2.css" />
     <Content Include="css\sb-admin-2.min.css" />
+    <Content Include="Elecciones.aspx" />
     <Content Include="Imagenes\Avanzar.png" />
     <Content Include="Imagenes\logoAvanzar.png" />
     <Content Include="Imagenes\odontologia.png" />
@@ -83,13 +84,19 @@
     <Content Include="img\undraw_profile_3.svg" />
     <Content Include="img\undraw_rocket.svg" />
     <Content Include="Inicio.aspx" />
+    <Content Include="jsdev\Elecciones.js" />
+    <Content Include="jsdev\Localidades.js" />
     <Content Include="jsdev\Partidos.js" />
+    <Content Include="jsdev\Recintos.js" />
     <Content Include="js\sb-admin-2.js" />
     <Content Include="js\sb-admin-2.min.js" />
     <Content Include="js\vistas\chart-bar-demo.js" />
     <Content Include="js\vistas\chart-pie-demo.js" />
     <Content Include="js\vistas\datatables-demo.js" />
+    <Content Include="Localidades.aspx" />
+    <Content Include="Mesas.aspx" />
     <Content Include="Partidos.aspx" />
+    <Content Include="Recintos.aspx" />
     <Content Include="recursos\css\bootstrap.min.css" />
     <Content Include="recursos\css\style.css" />
     <Content Include="recursos\img\about.png" />
@@ -1846,12 +1853,33 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Elecciones.aspx.cs">
+      <DependentUpon>Elecciones.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Elecciones.aspx.designer.cs">
+      <DependentUpon>Elecciones.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Inicio.aspx.cs">
       <DependentUpon>Inicio.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Inicio.aspx.designer.cs">
       <DependentUpon>Inicio.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Localidades.aspx.cs">
+      <DependentUpon>Localidades.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Localidades.aspx.designer.cs">
+      <DependentUpon>Localidades.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Mesas.aspx.cs">
+      <DependentUpon>Mesas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Mesas.aspx.designer.cs">
+      <DependentUpon>Mesas.aspx</DependentUpon>
     </Compile>
     <Compile Include="Partidos.aspx.cs">
       <DependentUpon>Partidos.aspx</DependentUpon>
@@ -1861,6 +1889,13 @@
       <DependentUpon>Partidos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Recintos.aspx.cs">
+      <DependentUpon>Recintos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Recintos.aspx.designer.cs">
+      <DependentUpon>Recintos.aspx</DependentUpon>
+    </Compile>
     <Compile Include="SiteHome.Master.cs">
       <DependentUpon>SiteHome.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2135,6 +2170,16 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CapaEntidad\CapaEntidad.csproj">
+      <Project>{49ca7544-87e0-495f-854d-6e99ac804c02}</Project>
+      <Name>CapaEntidad</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CapaNegocio\CapaNegocio.csproj">
+      <Project>{55a54cd1-0ff0-4663-9b9e-4efca6f75653}</Project>
+      <Name>CapaNegocio</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
