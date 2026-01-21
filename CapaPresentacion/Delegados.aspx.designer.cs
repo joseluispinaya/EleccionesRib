@@ -11,7 +11,7 @@ namespace CapaPresentacion
 {
 
 
-    public partial class Mesas
+    public partial class Delegados
     {
     }
 }

@@ -125,7 +125,7 @@ function listaRecintosFull(idLocalidad, idEleccion) {
         responsive: true,
         "ajax": {
             "url": 'Recintos.aspx/ListaRecintos',
-            "type": "POST", // Cambiado a POST
+            "type": "POST",
             "contentType": "application/json; charset=utf-8",
             "dataType": "json",
             "data": function () {

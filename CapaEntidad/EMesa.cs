@@ -9,5 +9,6 @@
         public int CantidadInscritos { get; set; }
 
         public string NroMesaStr => $"Nro: {NumeroMesa:D3}";
+        public string CantidadInStr => $"{CantidadInscritos} Votantes";
     }
 }

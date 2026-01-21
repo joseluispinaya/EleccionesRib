@@ -44,7 +44,9 @@
     <Compile Include="ConexionBD.cs" />
     <Compile Include="DEleccion.cs" />
     <Compile Include="DLocalidad.cs" />
+    <Compile Include="DMesa.cs" />
     <Compile Include="DPartidoPol.cs" />
+    <Compile Include="DPersona.cs" />
     <Compile Include="DRecinto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -50,6 +50,7 @@
     <Compile Include="EPartidoPol.cs" />
     <Compile Include="EPersona.cs" />
     <Compile Include="ERecinto.cs" />
+    <Compile Include="MesaDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Respuesta.cs" />
   </ItemGroup>

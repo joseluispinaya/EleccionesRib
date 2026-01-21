@@ -95,8 +95,8 @@
                 </a>
                 <div id="collapseVenta" class="collapse" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="PersonasAdmin.aspx">Agregar Personal</a>
-                        <a class="collapse-item" href="DelegadosAdmin.aspx">Asignar Delegado</a>
+                        <a class="collapse-item" href="Personas.aspx">Agregar Personal</a>
+                        <a class="collapse-item" href="Delegados.aspx">Asignar Delegado</a>
                     </div>
                 </div>
             </li>
