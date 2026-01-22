@@ -1,13 +1,16 @@
 ﻿
 var table; // Variable global para la tabla
+var select2ModalIniciado = false;
 
 $(document).ready(function () {
     // Inicialización
     $("#cboLocalida").prop("disabled", true);
     $("#cboRecint").prop("disabled", true);
     $("#cboMesa").prop("disabled", true);
-    cargarPersosFil();
+    //cargarPersosFil();
     cargarElecciones();
+    // Inicializamos el Select2 del modal UNA SOLA VEZ al cargar la página
+    cargarPersonasModal();
 });
 
 // ==================== CARGAR ELECCIONES ====================
@@ -83,7 +86,7 @@ $("#cboEleccion").on("change", function () {
     if ($.fn.DataTable.isDataTable("#tbDelegaMesa")) {
         $("#tbDelegaMesa").DataTable().clear().draw();
     }
-    $('#tbDelegaMesa tbody').html('<tr><td colspan="6" class="text-center">Seleccione una localidad y recinto</td></tr>');
+    $('#tbDelegaMesa tbody').html('<tr><td colspan="7" class="text-center">Seleccione una localidad y recinto</td></tr>');
 
     // 4. CARGAR SIGUIENTE NIVEL SI HAY SELECCIÓN
     if (idEleccion) {
@@ -273,9 +276,9 @@ function cargarMesas(idRecinto, idEleccion) {
 
 function listaMesasDelegados(idRecinto, idEleccion) {
 
+    // Destrucción limpia
     if ($.fn.DataTable.isDataTable("#tbDelegaMesa")) {
-        $("#tbDelegaMesa").DataTable().destroy();
-        $('#tbDelegaMesa tbody').empty();
+        $("#tbDelegaMesa").DataTable().clear().destroy();
     }
 
     var request = {
@@ -303,27 +306,131 @@ function listaMesasDelegados(idRecinto, idEleccion) {
         },
         "columns": [
             { "data": "IdMesa", "visible": false, "searchable": false },
-            { "data": "NumeroMesaStr" },
-            { "data": "NombreDelegado" },
-            { "data": "CI" },
-            { "data": "Celular" },
+            // 1. MESA (Resaltada)
             {
-                "defaultContent": '<button class="btn btn-primary btn-ver btn-sm"><i class="fas fa-tags"></i></button>',
+                "data": "NumeroMesaStr",
+                "render": function (data, type, row) {
+                    return `<span class="font-weight-bold text-primary">${data}</span>`;
+                }
+            },
+            // 2. ESTADO (Badge Visual)
+            {
+                "data": "EstaAsignada",
+                "className": "text-center",
+                "render": function (data, type, row) {
+                    if (data === true) {
+                        return '<span class="badge badge-success px-2 py-1">ASIGNADA</span>';
+                    } else {
+                        return '<span class="badge badge-danger px-2 py-1">VACANTE</span>';
+                    }
+                }
+            },
+            // 3. NOMBRE DELEGADO
+            {
+                "data": "NombreDelegado",
+                "render": function (data, type, row) {
+                    if (row.EstaAsignada) {
+                        return `<i class="fas fa-user mr-2 text-muted"></i>${data}`;
+                    } else {
+                        return '<span class="text-muted font-italic small">-- Sin Asignar --</span>';
+                    }
+                }
+            },
+            // 4. CI
+            { "data": "CI" },
+
+            // 5. CELULAR (Con enlace a WhatsApp opcional si quisieras)
+            {
+                "data": "Celular",
+                "render": function (data, type, row) {
+                    if (row.EstaAsignada && data !== "-") {
+                        return `<i class="fas fa-mobile-alt mr-1 text-success"></i> ${data}`;
+                    }
+                    return data;
+                }
+            },
+            // 6. BOTONES DE ACCIÓN (Dinámicos)
+            {
+                "data": null,
+                "className": "text-center",
                 "orderable": false,
-                "searchable": false,
-                "width": "50px"
+                "width": "100px",
+                "render": function (data, type, row) {
+                    // LOGICA DE NEGOCIO EN EL FRONTEND
+                    if (row.EstaAsignada === true) {
+                        // Si ya tiene delegado: Botón ROJO para eliminar asignación
+                        // Usamos row.IdAsignacion para saber qué borrar
+                        return `<button type="button" class="btn btn-outline-danger btn-sm btn-eliminar-asig" 
+                                        data-idasignacion="${row.IdAsignacion}" title="Quitar Delegado">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>`;
+                    } else {
+                        // Si está vacante: Botón VERDE para asignar
+                        // Usamos row.IdMesa para saber a dónde asignar
+                        // Nota: data-mesa es para mostrar en el modal "Asignando a Mesa X"
+                        return `<button type="button" class="btn btn-success btn-sm btn-asignar-modal" 
+                                        data-idmesa="${row.IdMesa}" data-nromesa="${row.NumeroMesaStr}" title="Asignar Delegado">
+                                    <i class="fas fa-user-plus"></i> Asignar
+                                </button>`;
+                    }
+                }
             }
         ],
-        "order": [[0, "desc"]],
+        "order": [[0, "desc"]], // Ordenar por Nro Mesa (Columna 1 visible)
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
         }
     });
 }
 
-function cargarPersosFil() {
+// EVENTO PARA ASIGNAR (Botón Verde)
+$("#tbDelegaMesa tbody").on("click", ".btn-asignar-modal", function () {
+    let idMesa = $(this).data("idmesa");
+    let nroMesa = $(this).data("nromesa");
+    const textoRecinto = $("#cboRecint option:selected").text();
 
-    $("#cboBuscarPerso").select2({
+    $("#txtIdMesaAsignada").val(idMesa);
+    $("#txtNomRecinto").val(textoRecinto);
+    $("#txtNroMesaAsig").val(nroMesa);
+
+    // 2. LIMPIEZA DE CAMPOS (UX: Que no aparezca el dato del anterior asignado)
+    $("#txtIdPersom").val("0");
+    $("#txtNombrePacm").val("");
+    $("#txtNrocim").val("");
+
+    // Limpiar el Select2 visualmente
+    if ($("#cboBuscarPersom").hasClass("select2-hidden-accessible")) {
+        $("#cboBuscarPersom").val("").trigger("change")
+        //$("#cboBuscarPersom").val(null).trigger("change");
+    }
+
+    // 3. Mostrar Modal
+    $("#modalAsignacion").modal("show");
+
+    // 4. (Opcional pero recomendado) Poner foco en el select2 tras abrir
+    setTimeout(function () {
+        $("#cboBuscarPersom").select2("open");
+    }, 500);
+
+    //swal("Mensaje", "Voy a asignar a la mesa: " + nroMesa, "success")
+
+    // Aquí tu lógica:
+    // 1. Guardar idMesa en una variable global o hidden input
+    // 2. Abrir el modal de búsqueda de personas
+    // console.log("Voy a asignar a la mesa: " + nroMesa);
+    // $("#modalAsignar").modal("show");
+});
+
+// ==================== CONFIGURACIÓN SELECT2 (MODAL) ====================
+function cargarPersonasModal() {
+
+    // Evitamos reinicializar si ya existe
+    if (select2ModalIniciado) return;
+
+    $("#cboBuscarPersom").select2({
+        // CLAVE DEL ÉXITO: Esto soluciona el problema de z-index y foco en modales
+        dropdownParent: $('#modalAsignacion'),
+
         ajax: {
             url: "Personas.aspx/ObtenerPersonasFiltro",
             dataType: 'json',
@@ -334,67 +441,221 @@ function cargarPersosFil() {
                 return JSON.stringify({ busqueda: params.term });
             },
             processResults: function (data) {
-
                 return {
                     results: data.d.Data.map((item) => ({
                         id: item.IdPersona,
                         NroCi: item.CI,
                         text: item.NombreCompleto,
-                        Correo: item.Correo,
                         persona: item
                     }))
                 };
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                console.log(xhr.status + " \n" + xhr.responseText, "\n" + thrownError);
+                console.log(xhr.status + " : " + xhr.responseText);
             }
         },
         language: "es",
-        placeholder: 'Buscar Persona',
+        placeholder: 'Escriba nombre o CI...',
         minimumInputLength: 1,
-        templateResult: formatoRes
+        templateResult: formatoResMod,
+        width: '100%'
     });
+    // width: '100%' Asegura que ocupe todo el ancho del form-group
+    select2ModalIniciado = true;
 }
 
-function formatoRes(data) {
-
-    var imagenes = "Imagenes/Avanzar.png";
-    // Esto es por defecto, ya que muestra el "buscando..."
-    if (data.loading)
-        return data.text;
+// FORMATO VISUAL (Tu código estaba bien, lo mantengo igual)
+function formatoResMod(data) {
+    var imagenes = "Imagenes/Avanzar.png"; // Asegúrate que esta ruta sea correcta
+    if (data.loading) return data.text;
 
     var contenedor = $(
         `<table width="100%">
             <tr>
-                <td style="width:60px">
-                    <img style="height:60px;width:60px;margin-right:10px" src="${imagenes}"/>
+                <td style="width:40px">
+                    <img style="height:40px;width:40px;margin-right:10px" src="${imagenes}"/>
                 </td>
                 <td>
-                    <p style="font-weight: bolder;margin:2px">${data.text}</p>
-                    <p style="margin:2px">${data.NroCi}</p>
+                    <div style="font-weight: bold;">${data.text}</div>
+                    <div style="font-size: 0.85em; color: #666;">CI: ${data.NroCi}</div>
                 </td>
             </tr>
         </table>`
     );
-
     return contenedor;
 }
 
-$(document).on("select2:open", function () {
-    document.querySelector(".select2-search__field").focus();
-
-});
-
-// Evento para manejar la selección del cliente
-$("#cboBuscarPerso").on("select2:select", function (e) {
-
+// SELECCIÓN DE PERSONA
+$("#cboBuscarPersom").on("select2:select", function (e) {
     var data = e.params.data.persona;
-    $("#txtIdPerso").val(data.IdPersona);
-    $("#txtNombrePac").val(data.NombreCompleto);
-    $("#txtNroci").val(data.CI);
-    //console.log(data);
 
-    $("#cboBuscarPerso").val("").trigger("change")
+    // Llenar campos ocultos o visibles
+    $("#txtIdPersom").val(data.IdPersona);
+    $("#txtNombrePacm").val(data.NombreCompleto);
+    $("#txtNrocim").val(data.CI);
+
+    $("#cboBuscarPersom").val("").trigger("change")
+
+    // Limpiar el select para que quede listo para otra búsqueda si se equivocó
+    // $("#cboBuscarPersom").val(null).trigger("change"); // Opcional: Si prefieres que se vea el nombre seleccionado, quita esta línea
 });
+
+// FOCO EN CAMPO DE BÚSQUEDA DEL SELECT2
+$(document).on("select2:open", function (e) {
+    // Solo aplicamos el foco si el select2 abierto está dentro del modal
+    if ($(e.target).attr('id') === 'cboBuscarPersom') {
+        document.querySelector(".select2-search__field").focus();
+    }
+});
+
+// EVENTO PARA ELIMINAR (Botón Rojo)
+$("#tbDelegaMesa tbody").on("click", ".btn-eliminar-asig", function () {
+    let idAsignacion = $(this).data("idasignacion");
+
+    swal("Mensaje", "Quitar asignacion del Id: " + idAsignacion, "warning")
+});
+
+$("#btnGuardarRegistro").on("click", function () {
+
+    // Bloquear botón para evitar doble click
+    let $btn = $(this);
+    $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
+
+    // 1. Obtener datos
+    let idPersona = $("#txtIdPersom").val();
+    let idMesa = $("#txtIdMesaAsignada").val();
+    let idRecinto = $("#cboRecint").val(); // Necesario para refrescar la tabla después
+    let idEleccion = $("#cboEleccion").val();
+
+    // 2. Validaciones
+    if (idPersona === "0" || idPersona === "") {
+        //swal("Atención", "Debe buscar y seleccionar una persona.", "warning");
+        toastr.warning("Debe buscar y seleccionar una persona.");
+        resetBtn($btn); return;
+    }
+
+    if (idMesa === "0" || idMesa === "") {
+        swal("Error", "No se identificó la mesa. Cierre y vuelva a intentar.", "error");
+        resetBtn($btn); return;
+    }
+
+    // 3. Objeto para enviar
+    var request = {
+        idPersona: parseInt(idPersona),
+        idMesa: parseInt(idMesa)
+    };
+
+    // 4. AJAX
+    // let $btn = $(this);
+    // $btn.prop("disabled", true).text("Guardando...");
+
+    $.ajax({
+        type: "POST",
+        url: "Delegados.aspx/RegistrarAsignacion", // Asegúrate de crear este WebMethod (ver punto 3 abajo)
+        data: JSON.stringify(request),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            if (response.d.Estado) {
+                // Éxito
+                $("#modalAsignacion").modal("hide");
+                toastr.success(response.d.Mensaje);
+
+                // Recargar tabla para ver el cambio (Verde -> Rojo)
+                listaMesasDelegados(idRecinto, idEleccion);
+                cargarMesas(idRecinto, idEleccion);
+            } else {
+                // Error de negocio (Ej: Ya tiene mesa en otro recinto)
+                swal("No se pudo asignar", response.d.Mensaje, "warning");
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.log(xhr.responseText);
+            swal("Error", "Error de conexión con el servidor.", "error");
+        },
+        complete: function () {
+            resetBtn($btn);
+            //$btn.prop("disabled", false).text("Registrar");
+        }
+    });
+});
+
+// Función auxiliar para restaurar botón
+function resetBtn($btn) {
+    $btn.prop('disabled', false).html('<i class="fas fa-plus-circle mr-2"></i>Registrar');
+}
+
+//function cargarPersosFil() {
+
+//    $("#cboBuscarPerso").select2({
+//        ajax: {
+//            url: "Personas.aspx/ObtenerPersonasFiltro",
+//            dataType: 'json',
+//            type: "POST",
+//            contentType: "application/json; charset=utf-8",
+//            delay: 250,
+//            data: function (params) {
+//                return JSON.stringify({ busqueda: params.term });
+//            },
+//            processResults: function (data) {
+
+//                return {
+//                    results: data.d.Data.map((item) => ({
+//                        id: item.IdPersona,
+//                        NroCi: item.CI,
+//                        text: item.NombreCompleto,
+//                        Correo: item.Correo,
+//                        persona: item
+//                    }))
+//                };
+//            },
+//            error: function (xhr, ajaxOptions, thrownError) {
+//                console.log(xhr.status + " \n" + xhr.responseText, "\n" + thrownError);
+//            }
+//        },
+//        language: "es",
+//        placeholder: 'Buscar Persona',
+//        minimumInputLength: 1,
+//        templateResult: formatoRes
+//    });
+//}
+
+//function formatoRes(data) {
+
+//    var imagenes = "Imagenes/Avanzar.png";
+//    if (data.loading)
+//        return data.text;
+
+//    var contenedor = $(
+//        `<table width="100%">
+//            <tr>
+//                <td style="width:60px">
+//                    <img style="height:60px;width:60px;margin-right:10px" src="${imagenes}"/>
+//                </td>
+//                <td>
+//                    <p style="font-weight: bolder;margin:2px">${data.text}</p>
+//                    <p style="margin:2px">${data.NroCi}</p>
+//                </td>
+//            </tr>
+//        </table>`
+//    );
+
+//    return contenedor;
+//}
+
+//$(document).on("select2:open", function () {
+//    document.querySelector(".select2-search__field").focus();
+
+//});
+
+//$("#cboBuscarPerso").on("select2:select", function (e) {
+
+//    var data = e.params.data.persona;
+//    $("#txtIdPerso").val(data.IdPersona);
+//    $("#txtNombrePac").val(data.NombreCompleto);
+//    $("#txtNroci").val(data.CI);
+
+//    $("#cboBuscarPerso").val("").trigger("change")
+//});
 
 // fin del archivo

@@ -37,5 +37,15 @@ namespace CapaNegocio
         {
             return DPersona.GetInstance().ObtenerPersonasFiltro(Busqueda);
         }
+
+        public Respuesta<bool> RegistrarAsignacion(int idPersona, int idMesa)
+        {
+            return DPersona.GetInstance().RegistrarAsignacion(idPersona, idMesa);
+        }
+
+        public Respuesta<DelegadoDto> LoginDelegado(string correo, string claveHash)
+        {
+            return DPersona.GetInstance().LoginDelegado(correo, claveHash);
+        }
     }
 }

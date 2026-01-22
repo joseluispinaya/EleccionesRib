@@ -249,5 +249,51 @@ namespace CapaDatos
                 };
             }
         }
+
+        public Respuesta<List<MesaPendienteDto>> ListarPendientes(int idPersona, int idEleccion)
+        {
+            try
+            {
+                List<MesaPendienteDto> lista = new List<MesaPendienteDto>();
+
+                using (SqlConnection con = ConexionBD.GetInstance().ConexionDB())
+                {
+                    using (SqlCommand cmd = new SqlCommand("usp_ListarMesasPendientesDelegado", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@IdPersona", idPersona);
+                        cmd.Parameters.AddWithValue("@IdEleccion", idEleccion);
+
+                        con.Open();
+
+                        using (SqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                lista.Add(new MesaPendienteDto()
+                                {
+                                    IdMesa = Convert.ToInt32(dr["IdMesa"]),
+                                    Localidad = dr["Localidad"].ToString(),
+                                    Recinto = dr["Recinto"].ToString(),
+                                    NumeroMesa = Convert.ToInt32(dr["NumeroMesa"]),
+                                    CantidadInscritos = Convert.ToInt32(dr["CantidadInscritos"])
+                                });
+                            }
+                        }
+                    }
+                }
+
+                return new Respuesta<List<MesaPendienteDto>>()
+                {
+                    Estado = true,
+                    Data = lista,
+                    Mensaje = lista.Count > 0 ? "Tienes mesas pendientes." : "¡Todo listo! No tienes mesas pendientes."
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Respuesta<List<MesaPendienteDto>> { Estado = false, Mensaje = ex.Message };
+            }
+        }
     }
 }

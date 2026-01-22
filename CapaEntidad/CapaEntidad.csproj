@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DelegadoDto.cs" />
     <Compile Include="EActa.cs" />
     <Compile Include="EDelegado.cs" />
     <Compile Include="EDetalleVoto.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="EPersona.cs" />
     <Compile Include="ERecinto.cs" />
     <Compile Include="MesaDto.cs" />
+    <Compile Include="MesaPendienteDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Respuesta.cs" />
   </ItemGroup>

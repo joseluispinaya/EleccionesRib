@@ -42,5 +42,10 @@ namespace CapaNegocio
         {
             return DMesa.GetInstance().ListaMesasConDelegados(IdRecinto, IdEleccion);
         }
+
+        public Respuesta<List<MesaPendienteDto>> ListarPendientes(int idPersona, int idEleccion)
+        {
+            return DMesa.GetInstance().ListarPendientes(idPersona, idEleccion);
+        }
     }
 }
