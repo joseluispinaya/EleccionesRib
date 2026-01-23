@@ -1,8 +1,7 @@
-﻿
-var table;
+﻿var table;
 
 $(document).ready(function () {
-    //mesasAsignadas();
+    mesasAsignadas();
 })
 
 function mesasAsignadas() {
@@ -12,15 +11,18 @@ function mesasAsignadas() {
         $('#tbPendientes tbody').empty();
     }
 
-    var request = {
-        IdPersona: 1
-    };
+    const usuario = sessionStorage.getItem('usuDelegado');
+    const usua = JSON.parse(usuario);
 
+    var request = {
+        IdPersona: parseInt(usua.IdPersona)
+    };
+    console.log(request);
 
     table = $("#tbPendientes").DataTable({
         responsive: true,
         "ajax": {
-            "url": 'Inicio.aspx/MesasAsignadasDelegados',
+            "url": 'InicioDelegado.aspx/MesasAsignadasDelegados',
             "type": "POST",
             "contentType": "application/json; charset=utf-8",
             "dataType": "json",
@@ -84,7 +86,7 @@ function cargarPartidosPol() {
 
     $.ajax({
         type: "POST",
-        url: "Partidos.aspx/ListaPartidos",
+        url: "InicioDelegado.aspx/ListaPartidos",
         data: {},
         contentType: 'application/json; charset=utf-8',
         dataType: "json",
@@ -138,7 +140,7 @@ function registrarVotos(listaFinal, nulos, blancos, totalGeneral) {
 
     $.ajax({
         type: "POST",
-        url: "Inicio.aspx/GuardarVotos",
+        url: "InicioDelegado.aspx/GuardarVotos",
         data: JSON.stringify(request),
         contentType: "application/json; charset=utf-8",
         dataType: "json",

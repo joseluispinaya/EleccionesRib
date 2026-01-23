@@ -250,7 +250,7 @@ namespace CapaDatos
             }
         }
 
-        public Respuesta<List<MesaPendienteDto>> ListarPendientes(int idPersona, int idEleccion)
+        public Respuesta<List<MesaPendienteDto>> ListarPendientes(int idPersona)
         {
             try
             {
@@ -262,7 +262,6 @@ namespace CapaDatos
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@IdPersona", idPersona);
-                        cmd.Parameters.AddWithValue("@IdEleccion", idEleccion);
 
                         con.Open();
 
@@ -272,6 +271,7 @@ namespace CapaDatos
                             {
                                 lista.Add(new MesaPendienteDto()
                                 {
+                                    IdAsignacion = Convert.ToInt32(dr["IdAsignacion"]),
                                     IdMesa = Convert.ToInt32(dr["IdMesa"]),
                                     Localidad = dr["Localidad"].ToString(),
                                     Recinto = dr["Recinto"].ToString(),

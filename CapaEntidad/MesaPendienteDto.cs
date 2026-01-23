@@ -8,6 +8,7 @@ namespace CapaEntidad
 {
     public class MesaPendienteDto
     {
+        public int IdAsignacion { get; set; }
         public int IdMesa { get; set; }
         public string Localidad { get; set; }
         public string Recinto { get; set; }
@@ -16,5 +17,7 @@ namespace CapaEntidad
 
         // Propiedad auxiliar para mostrar "Mesa #5"
         public string NumeroMesaStr => "Mesa #" + NumeroMesa;
+
+        public string CantidadInStr => $"{CantidadInscritos} Votantes";
     }
 }

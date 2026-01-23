@@ -89,6 +89,8 @@
     <Content Include="jsdev\Elecciones.js" />
     <Content Include="jsdev\Inicio.js" />
     <Content Include="jsdev\Localidades.js" />
+    <Content Include="jsdev\Login.js" />
+    <Content Include="jsdev\Masterpa.js" />
     <Content Include="jsdev\Mesas.js" />
     <Content Include="jsdev\Partidos.js" />
     <Content Include="jsdev\Personas.js" />
@@ -99,10 +101,14 @@
     <Content Include="js\vistas\chart-pie-demo.js" />
     <Content Include="js\vistas\datatables-demo.js" />
     <Content Include="Localidades.aspx" />
+    <Content Include="Login.aspx" />
     <Content Include="logosPart\1d2dd439-83ca-4a60-ab26-59651af8cc2a.png" />
     <Content Include="logosPart\ae09a417-e563-485f-96de-4c5df096e12d.png" />
     <Content Include="logosPart\d2aa7b45-2181-4fb1-b7a2-d884b1b63ad4.png" />
     <Content Include="logosPart\e444f458-34ca-480e-a395-41165b801e82.png" />
+    <Content Include="MasterDelegado\InicioDelegado.aspx" />
+    <Content Include="MasterDelegado\jsdel\InicioDelegado.js" />
+    <Content Include="MasterDelegado\jsdel\MasterDele.js" />
     <Content Include="Mesas.aspx" />
     <Content Include="Partidos.aspx" />
     <Content Include="Personas.aspx" />
@@ -1891,6 +1897,27 @@
     <Compile Include="Localidades.aspx.designer.cs">
       <DependentUpon>Localidades.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterDelegado\HomeDelegado.Master.cs">
+      <DependentUpon>HomeDelegado.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterDelegado\HomeDelegado.Master.designer.cs">
+      <DependentUpon>HomeDelegado.Master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterDelegado\InicioDelegado.aspx.cs">
+      <DependentUpon>InicioDelegado.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterDelegado\InicioDelegado.aspx.designer.cs">
+      <DependentUpon>InicioDelegado.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Mesas.aspx.cs">
       <DependentUpon>Mesas.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1929,6 +1956,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MasterDelegado\HomeDelegado.Master" />
     <None Include="packages.config" />
     <Content Include="SiteHome.Master" />
     <Content Include="recursos\lib\owlcarousel\LICENSE" />

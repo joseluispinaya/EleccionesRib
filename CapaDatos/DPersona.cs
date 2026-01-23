@@ -246,7 +246,7 @@ namespace CapaDatos
 
                 using (SqlConnection con = ConexionBD.GetInstance().ConexionDB())
                 {
-                    using (SqlCommand comando = new SqlCommand("usp_Login", con))
+                    using (SqlCommand comando = new SqlCommand("usp_LoginNuevo", con))
                     {
                         comando.CommandType = CommandType.StoredProcedure;
                         comando.Parameters.AddWithValue("@Correo", correo);
@@ -259,7 +259,7 @@ namespace CapaDatos
                             {
                                 obj = new DelegadoDto
                                 {
-                                    IdAsignacion = Convert.ToInt32(dr["IdAsignacion"]),
+                                    //IdAsignacion = Convert.ToInt32(dr["IdAsignacion"]),
                                     IdPersona = Convert.ToInt32(dr["IdPersona"]),
                                     NombreCompleto = dr["NombreCompleto"].ToString(),
                                     Correo = dr["Correo"].ToString(),

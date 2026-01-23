@@ -51,18 +51,18 @@
                             <div class="form-row">
                                 <div class="form-group col-sm-8">
                                     <label for="txtNombre">Nombre Completo</label>
-                                    <input type="text" class="form-control form-control-sm input-validar" id="txtNombre" name="Nombres">
+                                    <input type="text" class="form-control form-control-sm input-validar" id="txtNombre" name="Nombres" autocomplete="off">
                                 </div>
                                 <div class="form-group col-sm-4">
                                     <label for="txtnroci">Nro CI</label>
-                                    <input type="text" class="form-control form-control-sm input-validar" id="txtnroci" name="Nro ci">
+                                    <input type="text" class="form-control form-control-sm input-validar" id="txtnroci" name="Nro ci" autocomplete="off">
                                 </div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-group col-sm-6">
                                     <label for="txtCelular">Celular</label>
-                                    <input type="text" class="form-control form-control-sm input-validar" id="txtCelular" name="Celular">
+                                    <input type="text" class="form-control form-control-sm input-validar" id="txtCelular" name="Celular" autocomplete="off">
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="cboEstado">Estado</label>
@@ -80,7 +80,7 @@
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="txtClave">Contraseña</label>
-                                    <input type="text" class="form-control form-control-sm input-validar" id="txtClave" name="Contraseña">
+                                    <input type="text" class="form-control form-control-sm input-validar" id="txtClave" name="Contraseña" autocomplete="off">
                                 </div>
 
                             </div>

@@ -48,6 +48,7 @@
     <Compile Include="DPartidoPol.cs" />
     <Compile Include="DPersona.cs" />
     <Compile Include="DRecinto.cs" />
+    <Compile Include="DResultados.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

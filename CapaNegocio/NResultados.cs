@@ -8,23 +8,23 @@ using CapaEntidad;
 
 namespace CapaNegocio
 {
-    public class NPartidoPol
+    public class NResultados
     {
         #region "PATRON SINGLETON"
-        private static NPartidoPol instancia = null;
-        private NPartidoPol() { }
-        public static NPartidoPol GetInstance()
+        private static NResultados instancia = null;
+        private NResultados() { }
+        public static NResultados GetInstance()
         {
             if (instancia == null)
             {
-                instancia = new NPartidoPol();
+                instancia = new NResultados();
             }
             return instancia;
         }
         #endregion
-        public Respuesta<List<EPartidoPol>> ListaPartidosPoliticos()
+        public Respuesta<bool> GuardarVotos(string VotosXml)
         {
-            return DPartidoPol.GetInstance().ListaPartidosPoliticos();
+            return DResultados.GetInstance().GuardarVotos(VotosXml);
         }
     }
 }

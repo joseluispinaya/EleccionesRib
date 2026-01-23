@@ -43,6 +43,7 @@
                                 <th>Localidad</th>
                                 <th>Recinto</th>
                                 <th>Nro de Mesa</th>
+                                <th>Nro Inscritos</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -59,59 +60,57 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content" id="loaddd">
                 <div class="modal-header">
-                    <h6>Lista de Partidos</h6>
+                    <h6>Registro Resultados</h6>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" value="0" id="txtIdEleccion">
                     <input type="hidden" value="0" id="txtIdMesa">
                     <input type="hidden" value="0" id="txtIdAsignacion">
+
+                    <div class="form-row">
+                        <div class="input-group input-group-sm col-sm-6 mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroupVotosNulos">Votos Nulos:</span>
+                            </div>
+                            <input type="number" class="form-control text-center" aria-label="Small" aria-describedby="inputGroupVotosNulos"
+                                id="txtTotalNulos" autocomplete="off" placeholder="Ej: 10">
+                        </div>
+
+                        <div class="input-group input-group-sm col-sm-6 mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroupVotosBlanco">Votos en Blanco:</span>
+                            </div>
+                            <input type="number" class="form-control text-center" aria-label="Small" aria-describedby="inputGroupVotosBlanco"
+                                id="txtTotalBlancos" autocomplete="off" placeholder="Ej: 10">
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="txtObservacion">Observacion</label>
+                        <textarea class="form-control" rows="2" id="txtObservacion"></textarea>
+                    </div>
+
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="form-row">
-                                <div class="input-group input-group-sm col-sm-4 mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="inputGroupTotalpa">Nulos:</span>
-                                    </div>
-                                    <input type="number" class="form-control text-right" aria-label="Small"
-                                        aria-describedby="inputGroupTotalpa" id="txtTotalNulos">
-                                </div>
-
-                                <div class="input-group input-group-sm col-sm-4 mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="inputGroupDescuento">Blancos:</span>
-                                    </div>
-                                    <input type="number" class="form-control text-right" aria-label="Small"
-                                        aria-describedby="inputGroupDescuento" id="txtTotalBlancos">
-                                </div>
-                                <div class="form-group col-sm-4">
-                                    <button type="button" class="btn btn-primary btn-block btn-sm" id="btnRegistroVotos"><i class="fas fa-user-plus mr-2"></i>Registrar Votos</button>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <table id="tbPartidosp" class="table table-sm table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Nombre</th>
-                                                <th>Siglas</th>
-                                                <th>Total Votos</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            <table id="tbPartidosp" class="table table-sm table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Sigla</th>
+                                        <th>Total Votos</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <!-- <a href="#" class="btn btn-primary btn-sm" target="_blank" id="linkImprimir">Imprimir</a> -->
-                    <button class="btn btn-danger btn-sm" type="button" data-dismiss="modal">Cerrar</button>
+                    <button id="btnRegistroVotos" class="btn btn-primary btn-sm" type="button"><i class="fas fa-user-plus mr-2"></i>Registrar Votos</button>
+                    <button class="btn btn-danger btn-sm" type="button" data-dismiss="modal"><i class="fas fa-window-close mr-2"></i>Cancelar</button>
                 </div>
             </div>
         </div>

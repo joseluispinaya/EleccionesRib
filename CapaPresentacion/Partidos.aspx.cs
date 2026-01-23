@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using CapaEntidad;
+using CapaNegocio;
+using System.Web.Services;
 
 namespace CapaPresentacion
 {
@@ -12,6 +15,13 @@ namespace CapaPresentacion
         protected void Page_Load(object sender, EventArgs e)
         {
 
+        }
+
+        [WebMethod]
+        public static Respuesta<List<EPartidoPol>> ListaPartidos()
+        {
+
+            return NPartidoPol.GetInstance().ListaPartidosPoliticos();
         }
     }
 }

@@ -47,6 +47,7 @@
     <Compile Include="NPartidoPol.cs" />
     <Compile Include="NPersona.cs" />
     <Compile Include="NRecinto.cs" />
+    <Compile Include="NResultados.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

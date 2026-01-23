@@ -5,9 +5,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace CapaPresentacion
+namespace CapaPresentacion.MasterDelegado
 {
-    public partial class SiteHome : System.Web.UI.MasterPage
+    public partial class HomeDelegado : System.Web.UI.MasterPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
