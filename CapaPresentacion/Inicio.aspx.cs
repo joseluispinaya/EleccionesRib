@@ -19,6 +19,14 @@ namespace CapaPresentacion
         }
 
         [WebMethod]
+        public static Respuesta<List<ResultadoVotacionDto>> ResultGeneralVotacion()
+        {
+            return NResultados.GetInstance().ResultGeneVotacion();
+        }
+
+        // metodos de prueba
+
+        [WebMethod]
         public static Respuesta<List<MesaPendienteDto>> MesasAsignadasDelegados(int IdPersona)
         {
             if (IdPersona <= 0)

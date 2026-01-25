@@ -55,6 +55,7 @@
     <Compile Include="MesaPendienteDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Respuesta.cs" />
+    <Compile Include="ResultadoVotacionDto.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

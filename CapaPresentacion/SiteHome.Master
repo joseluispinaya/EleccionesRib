@@ -108,7 +108,7 @@
                 </a>
                 <div id="collapseEstadisticas" class="collapse" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="ResultadosAdm.aspx">Resultados</a>
+                        <a class="collapse-item" href="ConsultaMesas.aspx">Mesas Result</a>
                     </div>
                 </div>
             </li>

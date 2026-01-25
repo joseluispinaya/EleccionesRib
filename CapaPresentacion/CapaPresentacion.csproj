@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ConsultaMesas.aspx" />
     <Content Include="css\sb-admin-2.css" />
     <Content Include="css\sb-admin-2.min.css" />
     <Content Include="Delegados.aspx" />
@@ -85,6 +86,7 @@
     <Content Include="img\undraw_profile_3.svg" />
     <Content Include="img\undraw_rocket.svg" />
     <Content Include="Inicio.aspx" />
+    <Content Include="jsdev\ConsultaMesas.js" />
     <Content Include="jsdev\Delegados.js" />
     <Content Include="jsdev\Elecciones.js" />
     <Content Include="jsdev\Inicio.js" />
@@ -178,6 +180,8 @@
     <Content Include="vendor\chart.js\Chart.bundle.min.js" />
     <Content Include="vendor\chart.js\Chart.js" />
     <Content Include="vendor\chart.js\Chart.min.js" />
+    <Content Include="vendor\chartnew\chart.js" />
+    <Content Include="vendor\chartnew\chartjs-plugin-datalabels2.js" />
     <Content Include="vendor\datatables\dataTables.bootstrap4.css" />
     <Content Include="vendor\datatables\dataTables.bootstrap4.js" />
     <Content Include="vendor\datatables\dataTables.bootstrap4.min.css" />
@@ -1869,6 +1873,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsultaMesas.aspx.cs">
+      <DependentUpon>ConsultaMesas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ConsultaMesas.aspx.designer.cs">
+      <DependentUpon>ConsultaMesas.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Delegados.aspx.cs">
       <DependentUpon>Delegados.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

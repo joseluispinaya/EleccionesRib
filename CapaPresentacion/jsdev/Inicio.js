@@ -1,260 +1,183 @@
 ﻿
-var table;
+let graficoVotos = null;
+let mensajeMostrado = false;
 
 $(document).ready(function () {
-    //mesasAsignadas();
-})
+    // Carga inicial
+    resultadosData();
 
-function mesasAsignadas() {
-
-    if ($.fn.DataTable.isDataTable("#tbPendientes")) {
-        $("#tbPendientes").DataTable().destroy();
-        $('#tbPendientes tbody').empty();
-    }
-
-    var request = {
-        IdPersona: 1
-    };
-
-
-    table = $("#tbPendientes").DataTable({
-        responsive: true,
-        "ajax": {
-            "url": 'Inicio.aspx/MesasAsignadasDelegados',
-            "type": "POST",
-            "contentType": "application/json; charset=utf-8",
-            "dataType": "json",
-            "data": function () {
-                return JSON.stringify(request);
-            },
-            "dataSrc": function (json) {
-                if (json.d.Estado) {
-                    return json.d.Data;
-                } else {
-                    return [];
-                }
-            }
-        },
-        "columns": [
-            { "data": "IdMesa", "visible": false, "searchable": false },
-            { "data": "Localidad" },
-            { "data": "Recinto" },
-            { "data": "NumeroMesaStr" },
-            { "data": "CantidadInStr" },
-            {
-                "defaultContent": '<button class="btn btn-primary btn-Regi btn-sm"><i class="fas fa-edit mr-2"></i>Registrar</button>',
-                "orderable": false,
-                "searchable": false,
-                "width": "120px"
-            }
-        ],
-        "order": [[0, "desc"]],
-        "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
-        }
-    });
-}
-
-$("#tbPendientes tbody").on("click", ".btn-Regi", function (e) {
-    e.preventDefault();
-
-    let filaSeleccionada = $(this).closest("tr").hasClass("child")
-        ? $(this).closest("tr").prev()
-        : $(this).closest("tr");
-
-    const model = table.row(filaSeleccionada).data();
-    //console.log(model);
-    $("#txtIdMesa").val(model.IdMesa);
-    $("#txtIdAsignacion").val(model.IdAsignacion);
-
-    $("#txtTotalNulos").val("");
-    $("#txtTotalBlancos").val("");
-    $("#txtObservacion").val("");
-    cargarPartidosPol();
-
-
-    $("#modalVotacion").modal("show");
+    //5 minutos = 5 * 60 * 1000 = 300000 ms
+    //3 min = 3 * 60 * 1000 = 180000
+    setInterval(resultadosData, 60000);
 });
 
-let listaPartidos = [];
-
-function cargarPartidosPol() {
-
-    $("#tbPartidosp tbody").html("");
+function resultadosData() {
 
     $.ajax({
         type: "POST",
-        url: "Partidos.aspx/ListaPartidos",
+        url: "Inicio.aspx/ResultGeneralVotacion",
         data: {},
         contentType: 'application/json; charset=utf-8',
         dataType: "json",
         success: function (response) {
 
-            if (response.d.Estado) {
-
-                listaPartidos = response.d.Data;
-
-                listaPartidos.forEach((item, index) => {
-
-                    $("#tbPartidosp tbody").append(
-                        $("<tr>").append(
-                            $("<td>").text(item.Nombre),
-                            $("<td>").text(item.Sigla),
-                            $("<td>").append(
-                                $("<input>").attr({
-                                    type: "number",
-                                    value: 0,
-                                    min: 0,
-                                    step: "1",
-                                    class: "form-control form-control-sm cantidad-input input-reducido",
-                                    "data-index": index
-                                }).on("input", function () {
-                                    if (this.value === "" || isNaN(this.value) || parseInt(this.value) < 0) {
-                                        this.value = 0;
-                                    }
-                                })
-                            )
-                        )
-                    );
-                });
+            // 1. Validación de Errores Backend
+            if (!response.d.Estado) {
+                if (!mensajeMostrado) {
+                    console.warn(response.d.Mensaje); // Solo consola para no molestar tanto
+                    // swal("Aviso", response.d.Mensaje, "warning"); 
+                    mensajeMostrado = true;
+                }
+                return;
             }
-        }
-    });
-}
 
-function registrarVotos(listaFinal, nulos, blancos, totalGeneral) {
+            let lista = response.d.Data;
 
-    var request = {
-        oActa: {
-            IdMesa: parseInt($("#txtIdMesa").val()),
-            IdAsignacion: parseInt($("#txtIdAsignacion").val()),
-            VotosNulos: nulos,
-            VotosBlancos: blancos,
-            TotalVotosEmitidos: totalGeneral,
-            ObservacionDelegado: $("#txtObservacion").val().trim() || "Sin Observación"
-        },
-        ListaDetalleVoto: listaFinal
-    };
+            // 2. Validación: Sin Elección Activa
+            // Asumimos que tu SP devuelve un row con NombrePartido = "Sin Elección Activa" o lista vacía
+            if (lista.length === 0 || (lista.length === 1 && lista[0].NombrePartido.includes("Sin Elección"))) {
 
-    $.ajax({
-        type: "POST",
-        url: "Inicio.aspx/GuardarVotos",
-        data: JSON.stringify(request),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        beforeSend: function () {
-            $("#loaddd").LoadingOverlay("show");
-        },
-        success: function (response) {
-            $("#loaddd").LoadingOverlay("hide");
-            if (response.d.Estado) {
-                $('#modalVotacion').modal('hide');
-                swal("Éxito", response.d.Mensaje, "success");
+                if (!mensajeMostrado) {
+                    swal("Información", "No hay resultados disponibles por el momento.", "info");
+                    mensajeMostrado = true;
+                }
 
-                listaPartidos = [];
-                $("#txtIdMesa").val("0");
-                $("#txtIdAsignacion").val("0");
-
-                mesasAsignadas(); // recargar tabla
-            } else {
-                swal("Mensaje", response.d.Mensaje, "warning");
+                if (graficoVotos !== null) {
+                    graficoVotos.destroy();
+                    graficoVotos = null;
+                }
+                $("#tablaResultados tbody").html("");
+                $("#graficoVotacion").hide();
+                $("#tablaResultados").hide();
+                return;
             }
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            $("#loaddd").LoadingOverlay("hide");
-            console.log(xhr.status + " \n" + xhr.responseText, "\n" + thrownError);
-            swal("Error", "Ocurrió un problema, intente más tarde.", "error");
-        },
-        complete: function () {
-            $('#btnRegistroVotos').prop('disabled', false);
-        }
-    });
-}
 
-$('#btnRegistroVotos').on('click', function () {
+            // Datos válidos recibidos
+            mensajeMostrado = false;
+            $("#graficoVotacion").show();
+            $("#tablaResultados").show();
 
-    let listaFinal = [];
-    let sumaVotosPartidos = 0; // Variable para sumar votos válidos
-    let valido = true;
+            // ======================================================
+            // 3. PREPARACIÓN DE DATOS (Mapeo)
+            // ======================================================
 
-    // Evita múltiples clicks (sevolverá a activar al final en complete)
-    $('#btnRegistroVotos').prop('disabled', true);
+            // Nombres: "Comunidad Ciudadana (CC)"
+            let labels = lista.map(x => x.NombrePartido + (x.Sigla ? ` (${x.Sigla})` : ""));
 
-    $(".cantidad-input").each(function () {
+            // Datos numéricos
+            let datos = lista.map(x => x.TotalVotos);
 
-        let valor = $(this).val();
+            // COLORES: Usamos DIRECTAMENTE lo que viene de SQL
+            let backgroundColors = lista.map(x => x.ColorHex);
 
-        // Validación: vacío, NaN, negativo o no número
-        if (valor === "" || isNaN(valor) || parseInt(valor) < 0) {
+            // Bordes: Usamos el mismo color (o podrías oscurecerlo un poco con JS, pero así está bien)
+            let borderColors = lista.map(x => x.ColorHex);
 
-            valido = false;
+            // ======================================================
+            // 4. RENDERIZADO DEL GRÁFICO
+            // ======================================================
 
-        } else {
-            let votos = parseInt(valor);
-            let index = $(this).data("index");
+            // Destruir previo para actualizar
+            if (graficoVotos !== null) {
+                graficoVotos.destroy();
+            }
 
-            // Agregamos a la lista
-            listaFinal.push({
-                IdPartido: listaPartidos[index].IdPartido,
-                VotosObtenidos: votos
+            // Truco para limpiar el canvas y evitar "ghosting"
+            $("#graficoVotacion").remove();
+            $("#contenedorGrafico").append('<canvas id="graficoVotacion" style="width:100%; height:450px;"></canvas>');
+
+            const ctx = document.getElementById('graficoVotacion').getContext('2d');
+
+            graficoVotos = new Chart(ctx, {
+                type: 'bar', // 'bar' con indexAxis: 'y' hace barras horizontales
+                plugins: [ChartDataLabels],
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Votos',
+                        data: datos,
+                        borderWidth: 1,
+                        backgroundColor: backgroundColors,
+                        borderColor: borderColors,
+                        barPercentage: 0.7 // Hace las barras un poco más delgadas y elegantes
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y', // ESTO HACE QUE SEA HORIZONTAL
+                    // SOLUCIÓN AL CORTE DE TEXTO
+                    layout: {
+                        padding: {
+                            right: 50 // Reserva 50px a la derecha para que entre el texto
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            // Opcional: Ocultar la cuadrícula del eje X para que se vea más limpio
+                            grid: { display: false },
+                            // ticks: { display: false }, // Opcional: Ocultar números abajo si ya los muestras en las barras
+                            ticks: { precision: 0 } // Evita decimales en el eje X (votos son enteros)
+                        },
+                        y: {
+                            grid: { display: false } // Opcional: Quitar lineas horizontales
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }, // Ocultamos leyenda porque los nombres ya están en el eje Y
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return ` ${context.raw} votos`;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'right', // Pone el % a la derecha de la barra
+                            color: '#000',
+                            font: { weight: 'bold', size: 12 },
+                            formatter: function (value, ctx) {
+                                // Cálculo de porcentaje dinámico
+                                let total = ctx.chart.data.datasets[0].data.reduce((acc, x) => acc + x, 0);
+                                if (total === 0) return "0%"; // Evitar división por cero
+                                let pct = ((value / total) * 100).toFixed(1);
+                                return pct + "%";
+                            }
+                        }
+                    }
+                }
             });
 
-            // SUMAMOS AL ACUMULADOR
-            sumaVotosPartidos += votos;
+            // ======================================================
+            // 5. LLENADO DE LA TABLA
+            // ======================================================
+            let totalGeneral = datos.reduce((acc, num) => acc + num, 0);
+            let rows = "";
+
+            lista.forEach(item => {
+                let porcentaje = totalGeneral === 0 ? "0.00" : ((item.TotalVotos / totalGeneral) * 100).toFixed(2);
+
+                // Agregué un <span> con el color para referencia visual
+                rows += `
+                    <tr>
+                        <td class="align-middle">
+                            <span style="display:inline-block; width:12px; height:12px; background-color:${item.ColorHex}; border-radius:50%; margin-right:8px;"></span>
+                            ${item.NombrePartido} ${item.Sigla ? `<small class="text-muted">(${item.Sigla})</small>` : ""}
+                        </td>
+                        <td class="text-center align-middle font-weight-bold">${item.TotalVotos.toLocaleString()}</td>
+                        <td class="text-center align-middle">${porcentaje}%</td>
+                    </tr>
+                `;
+            });
+
+            $("#tablaResultados tbody").html(rows);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.error("Error al cargar resultados: " + xhr.responseText);
         }
     });
-
-    // Si hay error, no registra
-    if (!valido) {
-        swal("Advertencia", "Verifique los votos ingresados.", "warning");
-
-        $('#btnRegistroVotos').prop('disabled', false); // habilitar de nuevo
-        return; // Detener ejecución
-    }
-
-    // Validación simplificada de IdMesa, IdAsignacion
-    if (!parseInt($("#txtIdMesa").val()) || !parseInt($("#txtIdAsignacion").val())
-    ) {
-        toastr.warning("Ocurrió un error, intente nuevamente");
-        $('#btnRegistroVotos').prop('disabled', false);
-        return;
-    }
-
-    //if ($("#txtObservacion").val().trim() === "") {
-    //    toastr.warning("Debe completar el campo Observacion");
-    //    $("#txtObservacion").focus();
-    //    $('#btnRegistroVotos').prop('disabled', false);
-    //    return;
-    //}
-
-    const nulosStr = $("#txtTotalNulos").val().trim();
-    const blancosStr = $("#txtTotalBlancos").val().trim();
-
-    if (nulosStr === "" || parseInt(nulosStr) < 0) {
-        toastr.warning("Ingrese un nro positivo o 0.");
-        $("#txtTotalNulos").focus();
-        $('#btnRegistroVotos').prop('disabled', false);
-        return;
-    }
-
-    if (blancosStr === "" || parseInt(blancosStr) < 0) {
-        toastr.warning("Ingrese un nro positivo o 0.");
-        $("#txtTotalBlancos").focus();
-        $('#btnRegistroVotos').prop('disabled', false);
-        return;
-    }
-
-    // 2. Obtenemos Blancos y Nulos
-    let nulos = parseInt($("#txtTotalNulos").val()) || 0;
-    let blancos = parseInt($("#txtTotalBlancos").val()) || 0;
-
-    // 3. CALCULAMOS EL TOTAL REAL
-    let totalCalculado = sumaVotosPartidos + nulos + blancos;
-
-    //console.log(listaFinal);
-
-    registrarVotos(listaFinal, nulos, blancos, totalCalculado);
-
-});
+}
 
 // fin
