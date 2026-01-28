@@ -55,5 +55,11 @@ namespace CapaPresentacion
         {
             return NMesa.GetInstance().RegistrarMesas(oMesa);
         }
+
+        [WebMethod]
+        public static Respuesta<List<EMesa>> ListarMesasPorRecinto(int IdRecinto)
+        {
+            return NMesa.GetInstance().ListarMesasPorRecinto(IdRecinto);
+        }
     }
 }

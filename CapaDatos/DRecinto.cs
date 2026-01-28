@@ -72,6 +72,53 @@ namespace CapaDatos
             }
         }
 
+        public Respuesta<List<ERecinto>> ObtenerRecintosPorLocalidad(int idLocalidad)
+        {
+            try
+            {
+                List<ERecinto> rptLista = new List<ERecinto>();
+
+                using (SqlConnection con = ConexionBD.GetInstance().ConexionDB())
+                {
+                    using (SqlCommand comando = new SqlCommand("usp_ObtenerRecinNroMesas", con))
+                    {
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.Parameters.AddWithValue("@IdLocalidad", idLocalidad);
+                        con.Open();
+
+                        using (SqlDataReader dr = comando.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                rptLista.Add(new ERecinto
+                                {
+                                    IdRecinto = Convert.ToInt32(dr["IdRecinto"]),
+                                    Nombre = dr["Nombre"].ToString(),
+                                    NroMesas = Convert.ToInt32(dr["NroMesas"])
+                                });
+                            }
+                        }
+                    }
+                }
+                return new Respuesta<List<ERecinto>>()
+                {
+                    Estado = true,
+                    Data = rptLista,
+                    Mensaje = "Recintos obtenidos correctamente"
+                };
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier error inesperado
+                return new Respuesta<List<ERecinto>>()
+                {
+                    Estado = false,
+                    Mensaje = "Ocurrió un error: " + ex.Message,
+                    Data = null
+                };
+            }
+        }
+
         public Respuesta<bool> RegistrarRecinto(ERecinto oRecinto)
         {
             try

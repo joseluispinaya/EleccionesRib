@@ -108,7 +108,10 @@
                 </a>
                 <div id="collapseEstadisticas" class="collapse" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="ConsultaMesas.aspx">Mesas Result</a>
+                        <a class="collapse-item" href="ConsultaMesas.aspx">Sin Votos</a>
+                        <a class="collapse-item" href="ResultRecinto.aspx">Por Recinto</a>
+                        <a class="collapse-item" href="ResultMesa.aspx">Por Mesa</a>
+                        <a class="collapse-item" href="ResultLocalidad.aspx">Por Localidad</a>
                     </div>
                 </div>
             </li>

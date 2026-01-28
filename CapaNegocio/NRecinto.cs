@@ -27,6 +27,11 @@ namespace CapaNegocio
             return DRecinto.GetInstance().ListaRecintos(IdLocalidad, IdEleccion);
         }
 
+        public Respuesta<List<ERecinto>> ObtenerRecintosPorLocalidad(int idLocalidad)
+        {
+            return DRecinto.GetInstance().ObtenerRecintosPorLocalidad(idLocalidad);
+        }
+
         public Respuesta<bool> RegistrarRecinto(ERecinto oRecinto)
         {
             return DRecinto.GetInstance().RegistrarRecinto(oRecinto);

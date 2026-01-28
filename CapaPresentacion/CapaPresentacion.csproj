@@ -70,6 +70,7 @@
     <Content Include="ConsultaMesas.aspx" />
     <Content Include="css\sb-admin-2.css" />
     <Content Include="css\sb-admin-2.min.css" />
+    <Content Include="Default.aspx" />
     <Content Include="Delegados.aspx" />
     <Content Include="Elecciones.aspx" />
     <Content Include="Imagenes\Avanzar.png" />
@@ -97,6 +98,9 @@
     <Content Include="jsdev\Partidos.js" />
     <Content Include="jsdev\Personas.js" />
     <Content Include="jsdev\Recintos.js" />
+    <Content Include="jsdev\ResultLocalidad.js" />
+    <Content Include="jsdev\ResultMesa.js" />
+    <Content Include="jsdev\ResultRecinto.js" />
     <Content Include="js\sb-admin-2.js" />
     <Content Include="js\sb-admin-2.min.js" />
     <Content Include="js\vistas\chart-bar-demo.js" />
@@ -128,6 +132,7 @@
     <Content Include="recursos\img\bg-square.png" />
     <Content Include="recursos\img\hero.png" />
     <Content Include="recursos\img\heroc.png" />
+    <Content Include="recursos\img\herocate.png" />
     <Content Include="recursos\img\herov.png" />
     <Content Include="recursos\img\logoAvanzar.png" />
     <Content Include="recursos\img\team-1.jpg" />
@@ -158,6 +163,9 @@
     <Content Include="recursos\lib\waypoints\waypoints.min.js" />
     <Content Include="recursos\lib\wow\wow.js" />
     <Content Include="recursos\lib\wow\wow.min.js" />
+    <Content Include="ResultLocalidad.aspx" />
+    <Content Include="ResultMesa.aspx" />
+    <Content Include="ResultRecinto.aspx" />
     <Content Include="vendor\bootstrap-colorpicker\css\bootstrap-colorpicker.css" />
     <Content Include="vendor\bootstrap-colorpicker\css\bootstrap-colorpicker.min.css" />
     <Content Include="vendor\bootstrap-colorpicker\img\bootstrap-colorpicker\alpha-horizontal.png" />
@@ -1880,6 +1888,13 @@
     <Compile Include="ConsultaMesas.aspx.designer.cs">
       <DependentUpon>ConsultaMesas.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Delegados.aspx.cs">
       <DependentUpon>Delegados.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1957,6 +1972,27 @@
     </Compile>
     <Compile Include="Recintos.aspx.designer.cs">
       <DependentUpon>Recintos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ResultLocalidad.aspx.cs">
+      <DependentUpon>ResultLocalidad.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ResultLocalidad.aspx.designer.cs">
+      <DependentUpon>ResultLocalidad.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ResultMesa.aspx.cs">
+      <DependentUpon>ResultMesa.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ResultMesa.aspx.designer.cs">
+      <DependentUpon>ResultMesa.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ResultRecinto.aspx.cs">
+      <DependentUpon>ResultRecinto.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ResultRecinto.aspx.designer.cs">
+      <DependentUpon>ResultRecinto.aspx</DependentUpon>
     </Compile>
     <Compile Include="SiteHome.Master.cs">
       <DependentUpon>SiteHome.Master</DependentUpon>

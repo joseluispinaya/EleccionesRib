@@ -10,5 +10,6 @@
 
         public string NroMesaStr => $"Nro: {NumeroMesa:D3}";
         public string CantidadInStr => $"{CantidadInscritos} Votantes";
+        public string NroMesaLite => $"Mesa # {NumeroMesa}";
     }
 }

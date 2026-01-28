@@ -74,6 +74,55 @@ namespace CapaDatos
             }
         }
 
+        public Respuesta<List<EMesa>> ListarMesasPorRecinto(int idRecinto)
+        {
+            try
+            {
+                List<EMesa> rptLista = new List<EMesa>();
+
+                using (SqlConnection con = ConexionBD.GetInstance().ConexionDB())
+                {
+                    using (SqlCommand comando = new SqlCommand("usp_MesasIdRecintoNuevo", con))
+                    {
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.Parameters.AddWithValue("@IdRecinto", idRecinto);
+                        con.Open();
+
+                        using (SqlDataReader dr = comando.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                rptLista.Add(new EMesa()
+                                {
+                                    IdMesa = Convert.ToInt32(dr["IdMesa"]),
+                                    IdRecinto = Convert.ToInt32(dr["IdRecinto"]),
+                                    IdEleccion = Convert.ToInt32(dr["IdEleccion"]),
+                                    NumeroMesa = Convert.ToInt32(dr["NumeroMesa"]),
+                                    CantidadInscritos = Convert.ToInt32(dr["CantidadInscritos"])
+                                });
+                            }
+                        }
+                    }
+                }
+                return new Respuesta<List<EMesa>>()
+                {
+                    Estado = true,
+                    Data = rptLista,
+                    Mensaje = "Mesa obtenidos correctamente"
+                };
+            }
+            catch (Exception ex)
+            {
+                // Maneja cualquier error inesperado
+                return new Respuesta<List<EMesa>>()
+                {
+                    Estado = false,
+                    Mensaje = "Ocurrió un error: " + ex.Message,
+                    Data = null
+                };
+            }
+        }
+
         public Respuesta<List<EMesa>> ListaMesasSelect(int IdRecinto, int IdEleccion)
         {
             try

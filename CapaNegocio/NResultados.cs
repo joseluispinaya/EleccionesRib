@@ -36,5 +36,25 @@ namespace CapaNegocio
         {
             return DResultados.GetInstance().ListaMesasSinResult(IdRecinto, IdEleccion);
         }
+
+        public Respuesta<List<ResultadoVotacionDto>> ObtenerResultadosPorMesa(int idMesa)
+        {
+            return DResultados.GetInstance().ObtenerResultadosPorMesa(idMesa);
+        }
+
+        public Respuesta<List<ResultadoVotacionDto>> ObtenerResultadosPorRecinto(int idRecinto)
+        {
+            return DResultados.GetInstance().ObtenerResultadosPorRecinto(idRecinto);
+        }
+
+        public Respuesta<List<ResultLocalidadDto>> ResultPorLocalidad()
+        {
+            return DResultados.GetInstance().ResultPorLocalidad();
+        }
+
+        public Respuesta<List<ResultadoVotacionDto>> DetalleResultLocalidad(int idLocalidad)
+        {
+            return DResultados.GetInstance().DetalleResultLocalidad(idLocalidad);
+        }
     }
 }

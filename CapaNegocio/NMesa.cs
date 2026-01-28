@@ -28,6 +28,11 @@ namespace CapaNegocio
             return DMesa.GetInstance().ListaMesas(IdRecinto, IdEleccion);
         }
 
+        public Respuesta<List<EMesa>> ListarMesasPorRecinto(int idRecinto)
+        {
+            return DMesa.GetInstance().ListarMesasPorRecinto(idRecinto);
+        }
+
         public Respuesta<List<EMesa>> ListaMesasSelect(int IdRecinto, int IdEleccion)
         {
             return DMesa.GetInstance().ListaMesasSelect(IdRecinto, IdEleccion);

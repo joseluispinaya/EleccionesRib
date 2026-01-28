@@ -24,6 +24,12 @@ namespace CapaPresentacion
         }
 
         [WebMethod]
+        public static Respuesta<List<ERecinto>> RecintosPorLocalidad(int IdLocalidad)
+        {
+            return NRecinto.GetInstance().ObtenerRecintosPorLocalidad(IdLocalidad);
+        }
+
+        [WebMethod]
         public static Respuesta<bool> Guardar(ERecinto oRecinto)
         {
             return NRecinto.GetInstance().RegistrarRecinto(oRecinto);

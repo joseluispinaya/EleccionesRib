@@ -24,7 +24,6 @@ namespace CapaPresentacion
             return NResultados.GetInstance().ResultGeneVotacion();
         }
 
-        // metodos de prueba
 
         [WebMethod]
         public static Respuesta<List<MesaPendienteDto>> MesasAsignadasDelegados(int IdPersona)

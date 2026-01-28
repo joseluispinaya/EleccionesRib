@@ -160,5 +160,182 @@ namespace CapaDatos
             }
         }
 
+        public Respuesta<List<ResultadoVotacionDto>> ObtenerResultadosPorRecinto(int idRecinto)
+        {
+            try
+            {
+                List<ResultadoVotacionDto> rptLista = new List<ResultadoVotacionDto>();
+
+                using (SqlConnection con = ConexionBD.GetInstance().ConexionDB())
+                {
+                    using (SqlCommand comando = new SqlCommand("usp_ObtenerResultadosPorRecinto", con))
+                    {
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.Parameters.AddWithValue("@IdRecinto", idRecinto);
+                        con.Open();
+
+                        using (SqlDataReader dr = comando.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                rptLista.Add(new ResultadoVotacionDto()
+                                {
+                                    NombrePartido = dr["NombrePartido"].ToString(),
+                                    Sigla = dr["Sigla"].ToString(),
+                                    ColorHex = dr["ColorHex"].ToString(),
+                                    TotalVotos = Convert.ToInt32(dr["TotalVotos"]),
+                                    Orden = Convert.ToInt32(dr["Orden"])
+                                });
+                            }
+                        }
+                    }
+                }
+
+                return new Respuesta<List<ResultadoVotacionDto>>() { Estado = true, Data = rptLista };
+            }
+            catch (Exception ex)
+            {
+                return new Respuesta<List<ResultadoVotacionDto>>()
+                {
+                    Estado = false,
+                    Mensaje = "Ocurrió un error: " + ex.Message,
+                    Data = null
+                };
+            }
+        }
+
+        public Respuesta<List<ResultadoVotacionDto>> ObtenerResultadosPorMesa(int idMesa)
+        {
+            try
+            {
+                List<ResultadoVotacionDto> rptLista = new List<ResultadoVotacionDto>();
+
+                using (SqlConnection con = ConexionBD.GetInstance().ConexionDB())
+                {
+                    using (SqlCommand comando = new SqlCommand("usp_ObtenerResultadosPorMesa", con))
+                    {
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.Parameters.AddWithValue("@IdMesa", idMesa);
+                        con.Open();
+
+                        using (SqlDataReader dr = comando.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                rptLista.Add(new ResultadoVotacionDto()
+                                {
+                                    NombrePartido = dr["NombrePartido"].ToString(),
+                                    Sigla = dr["Sigla"].ToString(),
+                                    ColorHex = dr["ColorHex"].ToString(),
+                                    TotalVotos = Convert.ToInt32(dr["TotalVotos"]),
+                                    Orden = Convert.ToInt32(dr["Orden"])
+                                });
+                            }
+                        }
+                    }
+                }
+
+                return new Respuesta<List<ResultadoVotacionDto>>() { Estado = true, Data = rptLista };
+            }
+            catch (Exception ex)
+            {
+                return new Respuesta<List<ResultadoVotacionDto>>()
+                {
+                    Estado = false,
+                    Mensaje = "Ocurrió un error: " + ex.Message,
+                    Data = null
+                };
+            }
+        }
+
+        public Respuesta<List<ResultLocalidadDto>> ResultPorLocalidad()
+        {
+            try
+            {
+                List<ResultLocalidadDto> rptLista = new List<ResultLocalidadDto>();
+
+                using (SqlConnection con = ConexionBD.GetInstance().ConexionDB())
+                {
+                    using (SqlCommand comando = new SqlCommand("usp_ObtenerGanadorPorLocalidad", con))
+                    {
+                        comando.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+
+                        using (SqlDataReader dr = comando.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                rptLista.Add(new ResultLocalidadDto()
+                                {
+                                    IdLocalidad = Convert.ToInt32(dr["IdLocalidad"]),
+                                    NombreLocalidad = dr["NombreLocalidad"].ToString(),
+                                    NombrePartido = dr["NombrePartido"].ToString(),
+                                    Sigla = dr["Sigla"].ToString(),
+                                    LogoUrl = dr["LogoUrl"].ToString(),
+                                    ColorHex = dr["ColorHex"].ToString(),
+                                    TotalVotos = Convert.ToInt32(dr["TotalVotos"])
+                                });
+                            }
+                        }
+                    }
+                }
+
+                return new Respuesta<List<ResultLocalidadDto>>() { Estado = true, Data = rptLista };
+            }
+            catch (Exception ex)
+            {
+                return new Respuesta<List<ResultLocalidadDto>>()
+                {
+                    Estado = false,
+                    Mensaje = "Ocurrió un error: " + ex.Message,
+                    Data = null
+                };
+            }
+        }
+
+        public Respuesta<List<ResultadoVotacionDto>> DetalleResultLocalidad(int idLocalidad)
+        {
+            try
+            {
+                List<ResultadoVotacionDto> rptLista = new List<ResultadoVotacionDto>();
+
+                using (SqlConnection con = ConexionBD.GetInstance().ConexionDB())
+                {
+                    using (SqlCommand comando = new SqlCommand("usp_ObtenerResultadosPorLocalidad", con))
+                    {
+                        comando.CommandType = CommandType.StoredProcedure;
+                        comando.Parameters.AddWithValue("@IdLocalidad", idLocalidad);
+                        con.Open();
+
+                        using (SqlDataReader dr = comando.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                rptLista.Add(new ResultadoVotacionDto()
+                                {
+                                    NombrePartido = dr["NombrePartido"].ToString(),
+                                    Sigla = dr["Sigla"].ToString(),
+                                    ColorHex = dr["ColorHex"].ToString(),
+                                    TotalVotos = Convert.ToInt32(dr["TotalVotos"]),
+                                    Orden = Convert.ToInt32(dr["Orden"])
+                                });
+                            }
+                        }
+                    }
+                }
+
+                return new Respuesta<List<ResultadoVotacionDto>>() { Estado = true, Data = rptLista };
+            }
+            catch (Exception ex)
+            {
+                return new Respuesta<List<ResultadoVotacionDto>>()
+                {
+                    Estado = false,
+                    Mensaje = "Ocurrió un error: " + ex.Message,
+                    Data = null
+                };
+            }
+        }
+
     }
 }
