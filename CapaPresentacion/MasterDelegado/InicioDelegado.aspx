@@ -9,52 +9,77 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
     <div class="card shadow mb-4">
-    <div class="card-header bg-second-primary">
-        <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-id-card mr-3"></i>PANEL DE ELECCIONES</h6>
-    </div>
-    <div class="card-body">
-        <div class="form-row align-items-end">
-            <input type="hidden" value="0" id="txtIdPerso">
+        <div class="card-header bg-second-primary">
+            <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-id-card mr-3"></i>PANEL DE REGISTRO DE VOTOS</h6>
+        </div>
+        <div class="card-body">
 
-            <div class="form-group col-sm-4">
-                <label for="txtNombrePac">Nombre Delegado:</label>
-                <input type="text" class="form-control form-control-sm" id="txtNombrePac" disabled>
-            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <h6 class="mb-3 font-weight-bold text-primary text-center">Lista de mesas asignadas</h6>
 
-            <div class="form-group col-sm-4">
-                <label for="txtNroci">Nro CI:</label>
-                <input type="text" class="form-control form-control-sm" id="txtNroci" disabled>
-            </div>
-            <div class="form-group col-sm-4">
-                <label for="txtcelu">Celular:</label>
-                <input type="text" class="form-control form-control-sm" id="txtcelu" disabled>
+                    <table class="table table-striped table-bordered table-hover table-sm" id="tbPendientes" cellspacing="0" style="width: 100%">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Id</th>
+                                <th>Localidad / Recinto</th>
+                                <%--<th>Recinto</th>--%>
+                                <th>Nro Mesas</th>
+                                <%--<th>Nro Inscritos</th>--%>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <h6 class="mb-3 font-weight-bold text-primary text-center">Delegad@</h6>
+
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text font-weight-bold" id="inputGroupNroMesas">Nombre:</span>
+                                </div>
+                                <input type="text" class="form-control text-center font-weight-bold"
+                                    aria-label="Small" aria-describedby="inputGroupNroMesas"
+                                    id="txtNombrePac" disabled>
+                            </div>
+
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text font-weight-bold" id="inputGroupNroInscritoss">Nro CI:</span>
+                                </div>
+                                <input type="text" class="form-control text-center"
+                                    aria-label="Small" aria-describedby="inputGroupNroInscritoss"
+                                    id="txtNroci" disabled>
+                            </div>
+
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text font-weight-bold" id="inputGroupNroInscritocel">Nro Cel:</span>
+                                </div>
+                                <input type="text" class="form-control text-center"
+                                    aria-label="Small" aria-describedby="inputGroupNroInscritocel"
+                                    id="txtcelu" disabled>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text font-weight-bold" id="inputGroupNroCorre">Correo:</span>
+                                </div>
+                                <input type="text" class="form-control text-center font-weight-bold"
+                                    aria-label="Small" aria-describedby="inputGroupNroCorre"
+                                    id="txtCorreode" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
-
-        <h6 class="mb-3 font-weight-bold text-primary">Lista de mesas asignadas</h6>
-
-        <div class="row">
-            <div class="col-sm-12">
-                <table class="table table-striped table-bordered table-sm" id="tbPendientes" cellspacing="0" style="width: 100%">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Localidad</th>
-                            <th>Recinto</th>
-                            <th>Nro de Mesa</th>
-                            <th>Nro Inscritos</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
     </div>
-</div>
 
 <div class="modal fade" id="modalVotacion" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog" role="document">

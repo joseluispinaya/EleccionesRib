@@ -28,8 +28,13 @@ function loginSistema() {
             $.LoadingOverlay("hide");
             if (response.d.Estado) {
                 const user = response.d.Data;
-                sessionStorage.setItem('usuDelegado', JSON.stringify(user));
+                // 1. Limpiamos cualquier rastro anterior por seguridad
+                sessionStorage.clear();
+
                 if (user.Rol === "Delegado") {
+                    // === CASO DELEGADO ===
+                    // Guardamos con nombre específico
+                    sessionStorage.setItem('usuDelegado', JSON.stringify(user));
                     swal({
                         title: "Bienvenido Delegado",
                         text: `Hola ${user.NombreCompleto || "Usuario"} 👋`,
@@ -40,9 +45,13 @@ function loginSistema() {
 
                     $('#btnInicia').prop('disabled', false);
                     $("#usuario, #password").val("");
-                    
-                    setTimeout(() => window.location.href = 'MasterDelegado/InicioDelegado.aspx', 2000);
+
+                    setTimeout(() => window.location.href = 'MasterDelegado/InicioDelegado.aspx', 1700);
                 } else {
+                    // === CASO ADMIN ===
+                    // Guardamos con nombre DIFERENTE
+                    sessionStorage.setItem('usuAdmin', JSON.stringify(user));
+
                     swal({
                         title: "Bienvenido Admin",
                         text: `Hola ${user.NombreCompleto || "Usuario"} 👋`,
@@ -54,7 +63,7 @@ function loginSistema() {
                     $('#btnInicia').prop('disabled', false);
                     $("#usuario, #password").val("");
 
-                    setTimeout(() => window.location.href = 'Inicio.aspx', 2000);
+                    setTimeout(() => window.location.href = 'Inicio.aspx', 1700);
                 }
 
             } else {

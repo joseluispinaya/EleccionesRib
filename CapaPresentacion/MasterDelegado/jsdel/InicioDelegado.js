@@ -2,7 +2,16 @@
 
 $(document).ready(function () {
     mesasAsignadas();
+    datosDelegado();
 })
+
+function datosDelegado() {
+    const usuadet = JSON.parse(sessionStorage.getItem('usuDelegado'));
+    $("#txtNombrePac").val(usuadet.NombreCompleto);
+    $("#txtNroci").val(usuadet.CI);
+    $("#txtcelu").val(usuadet.Celular);
+    $("#txtCorreode").val(usuadet.Correo);
+}
 
 function mesasAsignadas() {
 
@@ -17,7 +26,81 @@ function mesasAsignadas() {
     var request = {
         IdPersona: parseInt(usua.IdPersona)
     };
-    console.log(request);
+    //console.log(request);
+
+    table = $("#tbPendientes").DataTable({
+        responsive: true,
+        autoWidth: false,
+        "ajax": {
+            "url": 'InicioDelegado.aspx/MesasAsignadasDelegados',
+            "type": "POST",
+            "contentType": "application/json; charset=utf-8",
+            "dataType": "json",
+            "data": function () {
+                return JSON.stringify(request);
+            },
+            "dataSrc": function (json) {
+                if (json.d.Estado) {
+                    return json.d.Data;
+                } else {
+                    return [];
+                }
+            }
+        },
+        "columns": [
+            { "data": "IdMesa", "visible": false, "searchable": false },
+            {
+                "data": "Localidad",
+                "className": "align-middle",
+                "render": function (data, type, row) {
+
+                    return `
+                        <div class="d-flex align-items-center">
+                            <div style="line-height: 1.2;">
+                                <span class="font-weight-bold text-dark" style="font-size: 1.1em;">${data}</span>
+                                <br/>
+                                <small class="text-muted">${row.Recinto}</small>
+                            </div>
+                        </div>
+                    `;
+                }
+            },
+            {
+                "data": "NumeroMesaStr",
+                "className": "text-center align-middle",
+                "render": function (data) {
+                    return `<h6 class="mb-0 text-dark font-weight-bold">
+                                <i class="fas fa-archive text-danger mr-2"></i>${data}
+                            </h6>`;
+                }
+            },
+            {
+                "defaultContent": '<button class="btn btn-sm btn-primary btn-Regi shadow-sm rounded-pill px-3"><i class="fas fa-edit mr-2"></i>Registrar</button>',
+                "orderable": false,
+                "searchable": false,
+                "className": "text-center align-middle"
+            }
+        ],
+        "order": [[0, "desc"]],
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+        }
+    });
+}
+
+function mesasAsignadasOrigi() {
+
+    if ($.fn.DataTable.isDataTable("#tbPendientes")) {
+        $("#tbPendientes").DataTable().destroy();
+        $('#tbPendientes tbody').empty();
+    }
+
+    const usuario = sessionStorage.getItem('usuDelegado');
+    const usua = JSON.parse(usuario);
+
+    var request = {
+        IdPersona: parseInt(usua.IdPersona)
+    };
 
     table = $("#tbPendientes").DataTable({
         responsive: true,
@@ -42,7 +125,6 @@ function mesasAsignadas() {
             { "data": "Localidad" },
             { "data": "Recinto" },
             { "data": "NumeroMesaStr" },
-            { "data": "CantidadInStr" },
             {
                 "defaultContent": '<button class="btn btn-primary btn-Regi btn-sm"><i class="fas fa-edit mr-2"></i>Registrar</button>',
                 "orderable": false,
@@ -65,7 +147,6 @@ $("#tbPendientes tbody").on("click", ".btn-Regi", function (e) {
         : $(this).closest("tr");
 
     const model = table.row(filaSeleccionada).data();
-    //console.log(model);
     $("#txtIdMesa").val(model.IdMesa);
     $("#txtIdAsignacion").val(model.IdAsignacion);
 

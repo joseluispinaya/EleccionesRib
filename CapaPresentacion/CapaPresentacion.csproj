@@ -73,6 +73,8 @@
     <Content Include="Default.aspx" />
     <Content Include="Delegados.aspx" />
     <Content Include="Elecciones.aspx" />
+    <Content Include="Error404.aspx" />
+    <Content Include="ErrorGeneral.aspx" />
     <Content Include="Imagenes\Avanzar.png" />
     <Content Include="Imagenes\logoAvanzar.png" />
     <Content Include="Imagenes\odontologia.png" />
@@ -1908,6 +1910,20 @@
     </Compile>
     <Compile Include="Elecciones.aspx.designer.cs">
       <DependentUpon>Elecciones.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Error404.aspx.cs">
+      <DependentUpon>Error404.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Error404.aspx.designer.cs">
+      <DependentUpon>Error404.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ErrorGeneral.aspx.cs">
+      <DependentUpon>ErrorGeneral.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ErrorGeneral.aspx.designer.cs">
+      <DependentUpon>ErrorGeneral.aspx</DependentUpon>
     </Compile>
     <Compile Include="Inicio.aspx.cs">
       <DependentUpon>Inicio.aspx</DependentUpon>

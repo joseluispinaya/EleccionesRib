@@ -1,15 +1,21 @@
 ﻿
 $(document).ready(function () {
-    // Validar si existen tanto el token como el usuario en sessionStorage
-    const usuarioL = sessionStorage.getItem('usuDelegado');
+    // AHORA BUSCAMOS SOLO AL ADMIN
+    const usuarioAdmin = sessionStorage.getItem('usuAdmin');
 
-    if (usuarioL) {
-        obtenerDetalleUsuarioRP();
-
-    } else {
-        window.location.href = 'Login.aspx';
+    if (!usuarioAdmin) {
+        // Si no existe la llave de Admin (incluso si hay una de Delegado), lo saca.
+        window.location.replace('Login.aspx'); // Usar replace es mejor
+        return;
     }
 
+    try {
+        const usua = JSON.parse(usuarioAdmin);
+        $("#nomUserg").text(usua.NombreCompleto);
+    } catch (error) {
+        console.error("Error leyendo sesión", error);
+        CerrarSesion();
+    }
 });
 
 $('#salirsis').on('click', function (e) {
@@ -17,19 +23,6 @@ $('#salirsis').on('click', function (e) {
     CerrarSesion();
 });
 
-function obtenerDetalleUsuarioRP() {
-    const usuario = sessionStorage.getItem('usuDelegado');
-    if (usuario) {
-        const usua = JSON.parse(usuario);
-        $("#nomUserg").text(usua.NombreCompleto);
-
-    } else {
-        window.location.href = 'Login.aspx';
-    }
-}
-
-
-// Función para cerrar sesión
 function CerrarSesion() {
     sessionStorage.clear();
     window.location.replace('Login.aspx');
